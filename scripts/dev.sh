@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Dev runner that ensures correct Node version and pnpm setup
 # Usage: ./scripts/dev.sh or pnpm dev:cursor
 
-set -e
+set -euo pipefail
 
 echo "🔧 Setting up development environment..."
 
@@ -30,11 +30,12 @@ nvm use 20 || {
 NODE_VERSION=$(node --version)
 echo "✅ Using Node $NODE_VERSION"
 
-# Enable corepack for pnpm
-echo "🔧 Enabling corepack..."
+# Activate pnpm via corepack
+echo "🔧 Activating pnpm@9.0.0..."
 corepack enable 2>/dev/null || {
   echo "⚠️  corepack enable failed (might need sudo), trying to continue..."
 }
+corepack prepare pnpm@9.0.0 --activate
 
 # Ensure we're in the project root
 cd "$(dirname "$0")/.."
@@ -42,10 +43,10 @@ cd "$(dirname "$0")/.."
 # Check if node_modules exists and better-sqlite3 is compiled for current Node version
 if [ -d "node_modules" ]; then
   echo "🔍 Checking if dependencies need rebuilding..."
-  # Try to run a quick check - if better-sqlite3 fails, we need to reinstall
-  node -e "require('better-sqlite3')" 2>/dev/null || {
+  # Try to run a quick check from apps/api - if better-sqlite3 fails, we need to rebuild
+  (cd apps/api && node -e "require('better-sqlite3')") 2>/dev/null || {
     echo "🔄 Rebuilding native dependencies for Node $NODE_VERSION..."
-    npm rebuild better-sqlite3
+    pnpm rebuild better-sqlite3
   }
 fi
 
@@ -58,8 +59,6 @@ fi
 # Start development servers
 echo ""
 echo "🚀 Starting development servers..."
-echo "   Frontend: http://localhost:5173"
-echo "   Backend:  http://localhost:3001"
 echo ""
 
 pnpm dev
