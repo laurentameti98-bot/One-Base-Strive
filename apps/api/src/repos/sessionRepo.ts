@@ -20,9 +20,23 @@ export function createSession(userId: string, expiresInDays = 30): SessionRow {
 
 export function getSessionByToken(token: string): SessionRow | undefined {
   const db = getDb();
-  return db
-    .prepare('SELECT * FROM sessions WHERE token = ? AND expires_at > datetime("now")')
+  const session = db
+    .prepare('SELECT * FROM sessions WHERE token = ?')
     .get(token) as SessionRow | undefined;
+
+  // Check expiration in TypeScript instead of SQL
+  if (session && session.expires_at) {
+    const expiresAt = new Date(session.expires_at).getTime();
+    const now = new Date().getTime();
+    
+    if (expiresAt <= now) {
+      // Session expired, delete it and return null
+      deleteSession(token);
+      return undefined;
+    }
+  }
+
+  return session;
 }
 
 export function deleteSession(token: string): void {
@@ -32,5 +46,22 @@ export function deleteSession(token: string): void {
 
 export function deleteExpiredSessions(): void {
   const db = getDb();
-  db.prepare('DELETE FROM sessions WHERE expires_at <= datetime("now")').run();
+  // Get all sessions and check expiration in TypeScript
+  const sessions = db.prepare('SELECT token, expires_at FROM sessions').all() as Array<{
+    token: string;
+    expires_at: string;
+  }>;
+
+  const now = new Date().getTime();
+  const expiredTokens = sessions.filter((session) => {
+    if (!session.expires_at) return false;
+    const expiresAt = new Date(session.expires_at).getTime();
+    return expiresAt <= now;
+  });
+
+  // Delete expired sessions
+  const deleteStmt = db.prepare('DELETE FROM sessions WHERE token = ?');
+  for (const session of expiredTokens) {
+    deleteStmt.run(session.token);
+  }
 }
