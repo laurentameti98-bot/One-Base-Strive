@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "dev": "concurrently \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:cursor": "./scripts/dev.sh",
     "dev:api": "pnpm --filter @one-base/api dev",
     "dev:web": "pnpm --filter @one-base/web dev",
     "build": "pnpm --filter @one-base/shared build && pnpm --filter @one-base/api build && pnpm --filter @one-base/web build",

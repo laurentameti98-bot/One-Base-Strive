@@ -69,6 +69,13 @@ one-base-strive/
    ```bash
    pnpm dev
    ```
+   
+   **Or from Cursor** (auto-handles Node version):
+   ```bash
+   pnpm dev:cursor
+   # or
+   ./scripts/dev.sh
+   ```
 
    This starts:
    - Frontend: http://localhost:5173
@@ -83,6 +90,8 @@ After seeding:
 ## Available Scripts
 
 - `pnpm dev` - Start both frontend and backend
+- `pnpm dev:cursor` - **Recommended for Cursor**: Auto-setup Node 20 + pnpm, then start servers
+- `./scripts/dev.sh` - Same as above, run directly
 - `pnpm dev:web` - Start frontend only
 - `pnpm dev:api` - Start backend only
 - `pnpm build` - Build all packages
