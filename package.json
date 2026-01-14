@@ -1,0 +1,30 @@
+{
+  "name": "one-base-strive",
+  "version": "0.5.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "npm run dev --workspace=@one-base/api",
+    "dev:web": "npm run dev --workspace=@one-base/web",
+    "build": "npm run build --workspace=@one-base/shared && npm run build --workspace=@one-base/api && npm run build --workspace=@one-base/web",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "migrate": "npm run migrate --workspace=@one-base/api",
+    "seed": "npm run seed --workspace=@one-base/api"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.4",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
