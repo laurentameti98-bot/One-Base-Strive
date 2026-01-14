@@ -26,35 +26,48 @@ one-base-strive/
 
 - **Node.js**: 18.x or 20.x (LTS versions recommended)
   - Note: Node v24+ may have compatibility issues with native modules
-- **npm**: Comes with Node.js (or use pnpm >= 8.0.0)
+- **pnpm**: >= 8.0.0 (recommended - via corepack)
+  - Alternative: npm (comes with Node.js)
 
 ## Quick Start
 
-1. **Install dependencies**
+1. **Enable corepack (for pnpm)**
    ```bash
-   npm install
-   # or if you have pnpm installed: pnpm install
+   corepack enable
    ```
 
-2. **Set up environment**
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+   
+   <details>
+   <summary>Alternative: Using npm</summary>
+   
+   ```bash
+   npm install
+   ```
+   </details>
+
+3. **Set up environment**
    ```bash
    cp .env.example .env
    # Edit .env if needed (defaults work for local dev)
    ```
 
-3. **Run migrations**
+4. **Run migrations**
    ```bash
    pnpm migrate
    ```
 
-4. **Seed database**
+5. **Seed database**
    ```bash
-   npm run seed
+   pnpm seed
    ```
 
-5. **Start development servers**
+6. **Start development servers**
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
    This starts:
@@ -69,14 +82,23 @@ After seeding:
 
 ## Available Scripts
 
-- `npm run dev` - Start both frontend and backend
-- `npm run dev:web` - Start frontend only
-- `npm run dev:api` - Start backend only
-- `npm run build` - Build all packages
-- `npm run lint` - Lint all packages
-- `npm run format` - Format code with Prettier
-- `npm run migrate` - Run database migrations
-- `npm run seed` - Seed database with demo data
+- `pnpm dev` - Start both frontend and backend
+- `pnpm dev:web` - Start frontend only
+- `pnpm dev:api` - Start backend only
+- `pnpm build` - Build all packages
+- `pnpm lint` - Lint all packages
+- `pnpm format` - Format code with Prettier
+- `pnpm migrate` - Run database migrations
+- `pnpm seed` - Seed database with demo data
+
+<details>
+<summary>Using npm instead</summary>
+
+Replace `pnpm` with `npm run` in all commands above. For example:
+- `npm run dev`
+- `npm run migrate`
+- `npm run seed`
+</details>
 
 ## Documentation
 

@@ -3,20 +3,21 @@
   "version": "0.5.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@9.0.0",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
-    "dev:api": "npm run dev --workspace=@one-base/api",
-    "dev:web": "npm run dev --workspace=@one-base/web",
-    "build": "npm run build --workspace=@one-base/shared && npm run build --workspace=@one-base/api && npm run build --workspace=@one-base/web",
-    "lint": "npm run lint --workspaces",
+    "dev": "concurrently \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:api": "pnpm --filter @one-base/api dev",
+    "dev:web": "pnpm --filter @one-base/web dev",
+    "build": "pnpm --filter @one-base/shared build && pnpm --filter @one-base/api build && pnpm --filter @one-base/web build",
+    "lint": "pnpm --recursive lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "migrate": "npm run migrate --workspace=@one-base/api",
-    "seed": "npm run seed --workspace=@one-base/api"
+    "migrate": "pnpm --filter @one-base/api migrate",
+    "seed": "pnpm --filter @one-base/api seed"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
@@ -25,6 +26,7 @@
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   }
 }

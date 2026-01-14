@@ -33,16 +33,27 @@ Download Node.js 20.x LTS from: https://nodejs.org/
 Once you have the correct Node version:
 
 ```bash
-# 1. Install dependencies
+# Enable pnpm (one-time setup)
+corepack enable
+
+# Install dependencies
+pnpm install
+
+# Run migrations (creates database)
+pnpm migrate
+
+# Seed with demo data
+pnpm seed
+
+# Start development servers
+pnpm dev
+```
+
+**Alternative with npm:**
+```bash
 npm install
-
-# 2. Run migrations (creates database)
 npm run migrate
-
-# 3. Seed with demo data
 npm run seed
-
-# 4. Start development servers
 npm run dev
 ```
 
@@ -131,22 +142,32 @@ one-base-strive/
 
 ## 🛠️ Available Commands
 
+**With pnpm (recommended):**
 ```bash
 # Development
-npm run dev          # Start both FE + BE
-npm run dev:web      # Frontend only
-npm run dev:api      # Backend only
+pnpm dev             # Start both FE + BE
+pnpm dev:web         # Frontend only
+pnpm dev:api         # Backend only
 
 # Database
-npm run migrate      # Run migrations
-npm run seed         # Seed demo data
+pnpm migrate         # Run migrations
+pnpm seed            # Seed demo data
 
 # Code Quality
-npm run lint         # Lint all packages
-npm run format       # Format with Prettier
+pnpm lint            # Lint all packages
+pnpm format          # Format with Prettier
 
 # Build
-npm run build        # Build all packages
+pnpm build           # Build all packages
+```
+
+**With npm (alternative):**
+```bash
+# Replace 'pnpm' with 'npm run' in any command above
+npm run dev
+npm run migrate
+npm run seed
+# etc.
 ```
 
 ## ✅ Verification Checklist
@@ -166,9 +187,11 @@ To start fresh:
 
 ```bash
 rm -rf apps/api/data/
-npm run migrate
-npm run seed
+pnpm migrate
+pnpm seed
 ```
+
+Or with npm: `npm run migrate && npm run seed`
 
 ## 📚 Next Steps
 

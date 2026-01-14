@@ -66,16 +66,23 @@ pnpm dev
 - Backend API: http://localhost:3001
 - Health check: http://localhost:3001/api/v1/health
 
+**Using npm:**
+```bash
+npm run dev
+```
+
 ### Run Individually
 
 **Backend only:**
 ```bash
 pnpm dev:api
+# or: npm run dev:api
 ```
 
 **Frontend only:**
 ```bash
 pnpm dev:web
+# or: npm run dev:web
 ```
 
 ## Testing the Setup
@@ -197,7 +204,7 @@ If you get "database is locked" errors:
 
 ### Dependencies not found
 
-Run `pnpm install` at the root level. pnpm workspaces will install all dependencies.
+Run `pnpm install` (or `npm install`) at the root level. Workspaces will install all dependencies.
 
 ### CORS errors
 
