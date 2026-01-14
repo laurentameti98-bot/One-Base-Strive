@@ -28,22 +28,43 @@ export function closeDb(): void {
 export function runMigrations(): void {
   const database = getDb();
 
-  // Read and execute the schema
+  // Run initial schema first (creates migrations table)
   const schemaPath = join(__dirname, 'schema.sql');
   const schema = readFileSync(schemaPath, 'utf-8');
-
   database.exec(schema);
 
-  // Record migration
-  const migrationName = '001_initial_schema';
-  const existingMigration = database
+  // Record initial migration
+  const initialMigration = '001_initial_schema';
+  const existingInitial = database
     .prepare('SELECT name FROM migrations WHERE name = ?')
-    .get(migrationName);
+    .get(initialMigration);
 
-  if (!existingMigration) {
-    database.prepare('INSERT INTO migrations (name) VALUES (?)').run(migrationName);
-    console.log(`✅ Migration applied: ${migrationName}`);
+  if (!existingInitial) {
+    database.prepare('INSERT INTO migrations (name) VALUES (?)').run(initialMigration);
+    console.log(`✅ Migration applied: ${initialMigration}`);
   } else {
-    console.log(`⏭️  Migration already applied: ${migrationName}`);
+    console.log(`⏭️  Migration already applied: ${initialMigration}`);
+  }
+
+  // Run additional migrations from migrations directory
+  const migrationsDir = join(__dirname, 'migrations');
+  const migrationFiles = ['002_crm_tables.sql']; // Add more as needed
+
+  for (const file of migrationFiles) {
+    const migrationPath = join(migrationsDir, file);
+    const migrationName = file.replace('.sql', '');
+
+    const existing = database
+      .prepare('SELECT name FROM migrations WHERE name = ?')
+      .get(migrationName);
+
+    if (!existing) {
+      const migrationSql = readFileSync(migrationPath, 'utf-8');
+      database.exec(migrationSql);
+      database.prepare('INSERT INTO migrations (name) VALUES (?)').run(migrationName);
+      console.log(`✅ Migration applied: ${migrationName}`);
+    } else {
+      console.log(`⏭️  Migration already applied: ${migrationName}`);
+    }
   }
 }

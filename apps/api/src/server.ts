@@ -5,6 +5,10 @@ import fastifyCors from '@fastify/cors';
 import { getDb, closeDb } from './db/connection.js';
 import { healthRoutes } from './routes/health.js';
 import { authRoutes } from './routes/auth.js';
+import { accountsRoutes } from './routes/accounts.js';
+import { contactsRoutes } from './routes/contacts.js';
+import { dealsRoutes } from './routes/deals.js';
+import { activitiesRoutes } from './routes/activities.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -28,6 +32,10 @@ await fastify.register(fastifyCors, {
 // Register routes under /api/v1
 await fastify.register(healthRoutes, { prefix: '/api/v1' });
 await fastify.register(authRoutes, { prefix: '/api/v1' });
+await fastify.register(accountsRoutes, { prefix: '/api/v1' });
+await fastify.register(contactsRoutes, { prefix: '/api/v1' });
+await fastify.register(dealsRoutes, { prefix: '/api/v1' });
+await fastify.register(activitiesRoutes, { prefix: '/api/v1' });
 
 // Initialize database connection
 getDb();

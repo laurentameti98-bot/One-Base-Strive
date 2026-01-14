@@ -15,3 +15,13 @@ export const ErrorCode = {
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
+
+export const ActivityType = {
+  NOTE: 'note',
+  CALL: 'call',
+  MEETING: 'meeting',
+} as const;
+
+export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType];
+
+export const DEFAULT_CURRENCY = 'EUR';

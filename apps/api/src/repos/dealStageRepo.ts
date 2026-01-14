@@ -1,5 +1,6 @@
 import { getDb } from '../db/connection.js';
 import { DealStageRow } from '../types/database.js';
+import { DealStage } from '@one-base/shared';
 import { randomUUID } from 'crypto';
 
 export function createDealStage(data: {
@@ -25,4 +26,16 @@ export function getDealStagesByOrgId(orgId: string): DealStageRow[] {
   return db
     .prepare('SELECT * FROM deal_stages WHERE org_id = ? ORDER BY sort_order')
     .all(orgId) as DealStageRow[];
+}
+
+export function dealStageRowToDealStage(row: DealStageRow): DealStage {
+  return {
+    id: row.id,
+    orgId: row.org_id,
+    name: row.name,
+    sortOrder: row.sort_order,
+    isClosed: row.is_closed === 1,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
 }
