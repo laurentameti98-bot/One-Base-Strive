@@ -6,7 +6,9 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "premigrate": "pnpm --filter @one-base/shared build",
     "migrate": "tsx src/scripts/migrate.ts",
+    "preseed": "pnpm --filter @one-base/shared build",
     "seed": "tsx src/scripts/seed.ts",
     "lint": "eslint src --ext .ts"
   },
