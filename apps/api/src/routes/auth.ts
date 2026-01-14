@@ -65,9 +65,15 @@ export async function authRoutes(fastify: FastifyInstance) {
       authService.logout(token);
     }
 
-    reply.clearCookie('session_token', { path: '/' });
+    // Clear cookie with matching options from login
+    reply.clearCookie('session_token', {
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+    });
 
-    return reply.send({ data: { success: true } });
+    return reply.send({ data: { ok: true } });
   });
 
   // GET /api/v1/auth/me
