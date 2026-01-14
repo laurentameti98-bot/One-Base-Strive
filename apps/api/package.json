@@ -10,7 +10,9 @@
     "migrate": "tsx src/scripts/migrate.ts",
     "preseed": "pnpm --filter @one-base/shared build",
     "seed": "tsx src/scripts/seed.ts",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.1",
@@ -25,11 +27,12 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.8",
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.19.29",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "eslint": "^8.56.0",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.17"
   }
 }

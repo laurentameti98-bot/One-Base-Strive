@@ -5,6 +5,8 @@ import {
   useUpdateInvoice,
   useDeleteInvoice,
 } from "../../hooks/useInvoices";
+import { UpdateInvoiceSchema, type InvoiceItem } from "@one-base/shared";
+import { z } from "zod";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
 import {
@@ -44,7 +46,7 @@ export function InvoiceDetailPage() {
     setDialogOpen(true);
   };
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: z.infer<typeof UpdateInvoiceSchema>) => {
     if (!id) return;
     try {
       await updateMutation.mutateAsync({ id, data: formData });
@@ -186,7 +188,7 @@ export function InvoiceDetailPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {items.map((item) => (
+                {items.map((item: InvoiceItem) => (
                   <TableRow key={item.id}>
                     <TableCell>{item.description}</TableCell>
                     <TableCell className="text-right">

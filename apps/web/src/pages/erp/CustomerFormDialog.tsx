@@ -50,27 +50,42 @@ export function CustomerFormDialog({
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(CreateInvoiceCustomerSchema),
-    defaultValues: initialData || {},
+    defaultValues: initialData
+      ? {
+          name: initialData.name,
+          accountId: initialData.accountId || undefined,
+          email: initialData.email || undefined,
+          phone: initialData.phone || undefined,
+          vatId: initialData.vatId || undefined,
+          billingAddressLine1: initialData.billingAddressLine1 || undefined,
+          billingAddressLine2: initialData.billingAddressLine2 || undefined,
+          billingPostalCode: initialData.billingPostalCode || undefined,
+          billingCity: initialData.billingCity || undefined,
+          billingCountry: initialData.billingCountry || undefined,
+        }
+      : {},
   });
 
-  const { data: accountsData } = useAccounts({ limit: 100 });
+  const { data: accountsData } = useAccounts();
   const accounts = accountsData?.data || [];
 
   useEffect(() => {
     if (initialData) {
-      reset(initialData);
+      reset({
+        name: initialData.name,
+        accountId: initialData.accountId || undefined,
+        email: initialData.email || undefined,
+        phone: initialData.phone || undefined,
+        vatId: initialData.vatId || undefined,
+        billingAddressLine1: initialData.billingAddressLine1 || undefined,
+        billingAddressLine2: initialData.billingAddressLine2 || undefined,
+        billingPostalCode: initialData.billingPostalCode || undefined,
+        billingCity: initialData.billingCity || undefined,
+        billingCountry: initialData.billingCountry || undefined,
+      });
     } else {
       reset({
         name: "",
-        email: "",
-        phone: "",
-        vatId: "",
-        accountId: "",
-        billingAddressLine1: "",
-        billingAddressLine2: "",
-        billingPostalCode: "",
-        billingCity: "",
-        billingCountry: "",
       });
     }
   }, [initialData, reset, open]);

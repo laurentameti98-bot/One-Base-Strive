@@ -25,5 +25,5 @@ export const activitiesApi = {
     apiClient.patch<ActivityResponse>(`/api/v1/activities/${id}`, data),
   
   delete: (id: string) =>
-    apiClient.delete<{ data: { ok: boolean } }>(`/api/v1/activities/${id}`),
+    apiClient.delete<void>(`/api/v1/activities/${id}`),
 };

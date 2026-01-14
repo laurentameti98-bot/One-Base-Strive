@@ -50,7 +50,7 @@ function rowToCustomer(row: InvoiceCustomerRow) {
 export function listInvoiceCustomers(orgId: string, search?: string) {
   const db = getDb();
   let query = 'SELECT * FROM invoice_customers WHERE org_id = ?';
-  const params: any[] = [orgId];
+  const params: unknown[] = [orgId];
 
   if (search) {
     query += ' AND (name LIKE ? OR email LIKE ?)';
@@ -113,7 +113,7 @@ export function updateInvoiceCustomer(
   const now = new Date().toISOString();
 
   const updates: string[] = [];
-  const values: any[] = [];
+  const values: unknown[] = [];
 
   if (data.accountId !== undefined) {
     updates.push('account_id = ?');
@@ -170,7 +170,8 @@ export function updateInvoiceCustomer(
   return getInvoiceCustomerById(orgId, id);
 }
 
-export function deleteInvoiceCustomer(orgId: string, id: string) {
+export function deleteInvoiceCustomer(orgId: string, id: string): boolean {
   const db = getDb();
-  db.prepare('DELETE FROM invoice_customers WHERE org_id = ? AND id = ?').run(orgId, id);
+  const result = db.prepare('DELETE FROM invoice_customers WHERE org_id = ? AND id = ?').run(orgId, id);
+  return result.changes > 0;
 }

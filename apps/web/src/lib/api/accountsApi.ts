@@ -18,5 +18,5 @@ export const accountsApi = {
     apiClient.patch<AccountResponse>(`/api/v1/accounts/${id}`, data),
   
   delete: (id: string) =>
-    apiClient.delete<{ data: { ok: boolean } }>(`/api/v1/accounts/${id}`),
+    apiClient.delete<void>(`/api/v1/accounts/${id}`),
 };

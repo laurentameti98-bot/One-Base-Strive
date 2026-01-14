@@ -179,7 +179,7 @@ export function getInvoiceWithItems(orgId: string, invoiceId: string) {
   return { ...invoice, items };
 }
 
-export function deleteInvoiceWithItems(orgId: string, invoiceId: string) {
+export function deleteInvoiceWithItems(orgId: string, invoiceId: string): boolean {
   // Items will be cascade deleted by FK constraint
-  invoiceRepo.deleteInvoice(orgId, invoiceId);
+  return invoiceRepo.deleteInvoice(orgId, invoiceId);
 }

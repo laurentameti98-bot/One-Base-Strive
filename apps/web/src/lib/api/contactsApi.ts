@@ -21,5 +21,5 @@ export const contactsApi = {
     apiClient.patch<ContactResponse>(`/api/v1/contacts/${id}`, data),
   
   delete: (id: string) =>
-    apiClient.delete<{ data: { ok: boolean } }>(`/api/v1/contacts/${id}`),
+    apiClient.delete<void>(`/api/v1/contacts/${id}`),
 };

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   useInvoiceCustomers,
   useCreateInvoiceCustomer,
   useUpdateInvoiceCustomer,
   useDeleteInvoiceCustomer,
 } from "../../hooks/useInvoiceCustomers";
-import type { InvoiceCustomer } from "@one-base/shared";
+import { CreateInvoiceCustomerSchema, type InvoiceCustomer } from "@one-base/shared";
+import { z } from "zod";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import {
@@ -27,7 +27,6 @@ import {
 import { CustomerFormDialog } from "./CustomerFormDialog";
 
 export function CustomersListPage() {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<
@@ -51,7 +50,7 @@ export function CustomersListPage() {
     setDialogOpen(true);
   };
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: z.infer<typeof CreateInvoiceCustomerSchema>) => {
     try {
       if (editingCustomer) {
         await updateMutation.mutateAsync({
@@ -94,15 +93,16 @@ export function CustomersListPage() {
         <CardHeader>
           <CardTitle>All Customers</CardTitle>
           <CardDescription>
-            <div className="flex gap-4 items-center mt-2">
-              <Input
-                placeholder="Search customers..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="max-w-sm"
-              />
-            </div>
+            Manage invoice customers
           </CardDescription>
+          <div className="flex gap-4 items-center mt-4">
+            <Input
+              placeholder="Search customers..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="max-w-sm"
+            />
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading && <p>Loading...</p>}
@@ -123,7 +123,7 @@ export function CustomersListPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {customers.map((customer) => (
+                {customers.map((customer: InvoiceCustomer) => (
                   <TableRow key={customer.id}>
                     <TableCell className="font-medium">
                       {customer.name}

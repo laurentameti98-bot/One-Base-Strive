@@ -5,6 +5,8 @@ import {
   useCreateInvoice,
   useDeleteInvoice,
 } from "../../hooks/useInvoices";
+import { CreateInvoiceSchema, type Invoice } from "@one-base/shared";
+import { z } from "zod";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Badge } from "../../components/ui/badge";
@@ -51,11 +53,14 @@ export function InvoicesListPage() {
     setDialogOpen(true);
   };
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: z.infer<typeof CreateInvoiceSchema>) => {
     try {
       const result = await createMutation.mutateAsync(formData);
       setDialogOpen(false);
-      navigate(`/erp/invoices/${result.data.invoice.id}`);
+      // Backend returns { data: { id, ...invoice, items } }
+      if (result?.data?.id) {
+        navigate(`/erp/invoices/${result.data.id}`);
+      }
     } catch (err) {
       console.error("Failed to create invoice:", err);
     }
@@ -105,27 +110,28 @@ export function InvoicesListPage() {
         <CardHeader>
           <CardTitle>All Invoices</CardTitle>
           <CardDescription>
-            <div className="flex gap-4 items-center mt-2">
-              <Input
-                placeholder="Search invoices..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="max-w-sm"
-              />
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="All statuses" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All statuses</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="sent">Sent</SelectItem>
-                  <SelectItem value="paid">Paid</SelectItem>
-                  <SelectItem value="void">Void</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            Manage invoices and billing
           </CardDescription>
+          <div className="flex gap-4 items-center mt-4">
+            <Input
+              placeholder="Search invoices..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="max-w-sm"
+            />
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="All statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All statuses</SelectItem>
+                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="sent">Sent</SelectItem>
+                <SelectItem value="paid">Paid</SelectItem>
+                <SelectItem value="void">Void</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading && <p>Loading...</p>}
@@ -146,7 +152,7 @@ export function InvoicesListPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {invoices.map((invoice) => (
+                {invoices.map((invoice: Invoice) => (
                   <TableRow
                     key={invoice.id}
                     className="cursor-pointer"

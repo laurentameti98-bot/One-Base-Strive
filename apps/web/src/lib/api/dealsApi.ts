@@ -19,7 +19,7 @@ export const dealsApi = {
     apiClient.patch<DealResponse>(`/api/v1/deals/${id}`, data),
   
   delete: (id: string) =>
-    apiClient.delete<{ data: { ok: boolean } }>(`/api/v1/deals/${id}`),
+    apiClient.delete<void>(`/api/v1/deals/${id}`),
   
   listStages: () => apiClient.get<DealStagesResponse>('/api/v1/deal-stages'),
 };

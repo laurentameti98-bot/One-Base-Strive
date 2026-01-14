@@ -1,6 +1,5 @@
 import { apiClient } from "../apiClient";
 import type {
-  Invoice,
   CreateInvoiceSchema,
   UpdateInvoiceSchema,
   InvoiceResponse,
@@ -15,7 +14,7 @@ export const invoicesApi = {
     customerId?: string;
     limit?: number;
     offset?: number;
-  }): Promise<z.infer<typeof InvoicesResponse>> => {
+  }): Promise<InvoicesResponse> => {
     const searchParams = new URLSearchParams();
     if (params?.search) searchParams.set("search", params.search);
     if (params?.status) searchParams.set("status", params.status);
@@ -27,24 +26,24 @@ export const invoicesApi = {
     return apiClient.get(`/api/v1/invoices${query ? `?${query}` : ""}`);
   },
 
-  get: async (id: string): Promise<z.infer<typeof InvoiceResponse>> => {
+  get: async (id: string): Promise<InvoiceResponse> => {
     return apiClient.get(`/api/v1/invoices/${id}`);
   },
 
   create: async (
     data: z.infer<typeof CreateInvoiceSchema>
-  ): Promise<z.infer<typeof InvoiceResponse>> => {
+  ): Promise<InvoiceResponse> => {
     return apiClient.post("/api/v1/invoices", data);
   },
 
   update: async (
     id: string,
     data: z.infer<typeof UpdateInvoiceSchema>
-  ): Promise<z.infer<typeof InvoiceResponse>> => {
+  ): Promise<InvoiceResponse> => {
     return apiClient.patch(`/api/v1/invoices/${id}`, data);
   },
 
-  delete: async (id: string): Promise<{ data: { ok: boolean } }> => {
+  delete: async (id: string): Promise<void> => {
     return apiClient.delete(`/api/v1/invoices/${id}`);
   },
 };

@@ -1,6 +1,6 @@
 import { ErrorResponse } from '@one-base/shared';
 
-const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001';
+const API_URL = (import.meta as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL || 'http://localhost:3001';
 
 export class ApiError extends Error {
   constructor(
@@ -21,6 +21,11 @@ async function handleResponse<T>(response: Response): Promise<T> {
       errorData.error.code,
       errorData.error.details
     );
+  }
+
+  // Handle 204 No Content
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return response.json();

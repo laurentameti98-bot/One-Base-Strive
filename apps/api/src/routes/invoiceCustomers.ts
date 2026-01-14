@@ -88,10 +88,19 @@ export async function invoiceCustomersRoutes(app: FastifyInstance) {
   });
 
   // Delete invoice customer
-  app.delete('/invoice-customers/:id', { preHandler: requireUser }, async (request) => {
+  app.delete('/invoice-customers/:id', { preHandler: requireUser }, async (request, reply) => {
     const { id } = request.params as { id: string };
-    invoiceCustomerRepo.deleteInvoiceCustomer(request.user!.orgId, id);
+    const deleted = invoiceCustomerRepo.deleteInvoiceCustomer(request.user!.orgId, id);
 
-    return { data: { ok: true } };
+    if (!deleted) {
+      return reply.code(404).send({
+        error: {
+          code: 'NOT_FOUND',
+          message: 'Invoice customer not found',
+        },
+      });
+    }
+
+    return reply.code(204).send();
   });
 }

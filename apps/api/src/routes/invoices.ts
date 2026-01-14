@@ -60,11 +60,11 @@ export async function invoicesRoutes(app: FastifyInstance) {
       );
 
       return reply.code(201).send({ data: invoice });
-    } catch (error: any) {
+    } catch (error: unknown) {
       return reply.code(400).send({
         error: {
           code: 'VALIDATION_ERROR',
-          message: error.message,
+          message: error instanceof Error ? error.message : 'Unknown error',
         },
       });
     }
@@ -93,8 +93,8 @@ export async function invoicesRoutes(app: FastifyInstance) {
       );
 
       return { data: invoice };
-    } catch (error: any) {
-      if (error.message === 'Invoice not found') {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === 'Invoice not found') {
         return reply.code(404).send({
           error: {
             code: 'NOT_FOUND',
@@ -106,17 +106,27 @@ export async function invoicesRoutes(app: FastifyInstance) {
       return reply.code(400).send({
         error: {
           code: 'VALIDATION_ERROR',
-          message: error.message,
+          message: error instanceof Error ? error.message : 'Unknown error',
         },
       });
     }
   });
 
   // Delete invoice
-  app.delete('/invoices/:id', { preHandler: requireUser }, async (request) => {
+  app.delete('/invoices/:id', { preHandler: requireUser }, async (request, reply) => {
     const { id } = request.params as { id: string };
-    invoiceService.deleteInvoiceWithItems(request.user!.orgId, id);
+    
+    const deleted = invoiceService.deleteInvoiceWithItems(request.user!.orgId, id);
 
-    return { data: { ok: true } };
+    if (!deleted) {
+      return reply.code(404).send({
+        error: {
+          code: 'NOT_FOUND',
+          message: 'Invoice not found',
+        },
+      });
+    }
+
+    return reply.code(204).send();
   });
 }

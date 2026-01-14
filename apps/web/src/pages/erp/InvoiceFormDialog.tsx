@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CreateInvoiceSchema,
   InvoiceStatus,
   type Invoice,
+  type InvoiceItem,
 } from "@one-base/shared";
 import { z } from "zod";
 import {
@@ -32,7 +33,7 @@ interface InvoiceFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: FormData) => void;
-  initialData?: Invoice & { items: any[] };
+  initialData?: Invoice & { items: InvoiceItem[] };
   isLoading?: boolean;
 }
 
@@ -56,10 +57,8 @@ export function InvoiceFormDialog({
     defaultValues: {
       customerId: "",
       issueDate: new Date().toISOString().split("T")[0],
-      dueDate: "",
-      status: "draft",
+      status: InvoiceStatus.DRAFT,
       currency: "EUR",
-      notes: "",
       items: [
         {
           description: "",
@@ -85,10 +84,10 @@ export function InvoiceFormDialog({
       reset({
         customerId: initialData.customerId,
         issueDate: initialData.issueDate,
-        dueDate: initialData.dueDate || "",
+        dueDate: initialData.dueDate || undefined,
         status: initialData.status,
         currency: initialData.currency,
-        notes: initialData.notes || "",
+        notes: initialData.notes || undefined,
         items: initialData.items.map((item, idx) => ({
           description: item.description,
           quantity: item.quantity,
@@ -101,10 +100,8 @@ export function InvoiceFormDialog({
       reset({
         customerId: "",
         issueDate: new Date().toISOString().split("T")[0],
-        dueDate: "",
-        status: "draft",
+        status: InvoiceStatus.DRAFT,
         currency: "EUR",
-        notes: "",
         items: [
           {
             description: "",
@@ -158,7 +155,7 @@ export function InvoiceFormDialog({
                   <SelectValue placeholder="Select customer..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {customers.map((customer) => (
+                  {customers.map((customer: { id: string; name: string }) => (
                     <SelectItem key={customer.id} value={customer.id}>
                       {customer.name}
                     </SelectItem>

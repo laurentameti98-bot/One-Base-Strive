@@ -65,7 +65,7 @@ export function listInvoices(
     LEFT JOIN invoice_customers ic ON i.customer_id = ic.id AND ic.org_id = i.org_id
     WHERE i.org_id = ?
   `;
-  const params: any[] = [orgId];
+  const params: unknown[] = [orgId];
 
   if (filters?.status) {
     query += ' AND i.status = ?';
@@ -85,7 +85,8 @@ export function listInvoices(
 
   query += ' ORDER BY i.issue_date DESC, i.invoice_number DESC';
 
-  const rows = db.prepare(query).all(...params) as any[];
+  type InvoiceWithCustomer = InvoiceRow & { customer_name?: string; customer_email?: string };
+  const rows = db.prepare(query).all(...params) as InvoiceWithCustomer[];
   return rows.map((row) => ({
     ...rowToInvoice(row),
     customerName: row.customer_name || null,
@@ -105,12 +106,12 @@ export function getInvoiceById(orgId: string, id: string) {
       LEFT JOIN invoice_customers ic ON i.customer_id = ic.id AND ic.org_id = i.org_id
       WHERE i.org_id = ? AND i.id = ?
     `)
-    .get(orgId, id) as any;
+    .get(orgId, id) as (InvoiceRow & { customer_name?: string; customer_email?: string }) | undefined;
 
   if (!row) return null;
 
   return {
-    ...rowToInvoice(row),
+    ...rowToInvoice(row as InvoiceRow),
     customerName: row.customer_name || null,
     customerEmail: row.customer_email || null,
   };
@@ -161,7 +162,7 @@ export function updateInvoice(orgId: string, id: string, data: UpdateInvoiceData
   const now = new Date().toISOString();
 
   const updates: string[] = [];
-  const values: any[] = [];
+  const values: unknown[] = [];
 
   if (data.customerId !== undefined) {
     updates.push('customer_id = ?');
@@ -218,9 +219,10 @@ export function updateInvoice(orgId: string, id: string, data: UpdateInvoiceData
   return getInvoiceById(orgId, id);
 }
 
-export function deleteInvoice(orgId: string, id: string) {
+export function deleteInvoice(orgId: string, id: string): boolean {
   const db = getDb();
-  db.prepare('DELETE FROM invoices WHERE org_id = ? AND id = ?').run(orgId, id);
+  const result = db.prepare('DELETE FROM invoices WHERE org_id = ? AND id = ?').run(orgId, id);
+  return result.changes > 0;
 }
 
 // Helper: Generate next invoice number for the org

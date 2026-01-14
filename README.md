@@ -49,7 +49,7 @@ one-base-strive/
    ```
    </details>
 
-3. **Set up environment**
+3. **Set up environment** (optional)
    ```bash
    cp .env.example .env
    # Edit .env if needed (defaults work for local dev)
@@ -67,19 +67,21 @@ one-base-strive/
    ```
 
 6. **Start development servers**
-   ```bash
-   pnpm dev
-   ```
    
-   **Or from Cursor** (auto-handles Node version):
+   **Recommended for Cursor** (auto-handles Node version + pnpm):
    ```bash
    pnpm dev:cursor
    # or
    ./scripts/dev.sh
    ```
+   
+   **Standard development**:
+   ```bash
+   pnpm dev
+   ```
 
    This starts:
-   - Frontend: http://localhost:5173
+   - Frontend: http://localhost:5173 (or next available port)
    - Backend API: http://localhost:3001
 
 ## Default Login Credentials
@@ -90,16 +92,25 @@ After seeding:
 
 ## Available Scripts
 
+### Development
 - `pnpm dev` - Start both frontend and backend
 - `pnpm dev:cursor` - **Recommended for Cursor**: Auto-setup Node 20 + pnpm, then start servers
 - `./scripts/dev.sh` - Same as above, run directly
 - `pnpm dev:web` - Start frontend only
 - `pnpm dev:api` - Start backend only
+
+### Database
+- `pnpm migrate` - Run database migrations
+- `pnpm seed` - Seed database with demo data
+
+### Build & Quality
 - `pnpm build` - Build all packages
 - `pnpm lint` - Lint all packages
 - `pnpm format` - Format code with Prettier
-- `pnpm migrate` - Run database migrations
-- `pnpm seed` - Seed database with demo data
+
+### Testing
+- `pnpm --filter @one-base/api test` - Run API tests (Vitest)
+- `pnpm --filter @one-base/api test:watch` - Run tests in watch mode
 
 <details>
 <summary>Using npm instead</summary>
@@ -113,8 +124,11 @@ Replace `pnpm` with `npm run` in all commands above. For example:
 ## Documentation
 
 See the `docs/` directory for detailed documentation:
-- [Development Setup](./docs/04-dev-setup.md)
-- [Architecture Decisions](./docs/decisions.md)
+- [Solution Design](./docs/solution-design.md) - Product context, data model, key principles
+- [Architecture](./docs/architecture.md) - Backend/frontend layers, shared package
+- [API Conventions](./docs/api-conventions.md) - Response formats, error codes, auth
+- [Development Setup](./docs/04-dev-setup.md) - Detailed setup instructions
+- [Architecture Decisions](./docs/decisions.md) - Tech stack and design decisions
 
 ## Features (Sprint 0.5)
 
