@@ -37,9 +37,11 @@ export const apiClient = {
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: data
+        ? {
+            'Content-Type': 'application/json',
+          }
+        : {},
       credentials: 'include',
       body: data ? JSON.stringify(data) : undefined,
     });
@@ -49,9 +51,11 @@ export const apiClient = {
   async put<T>(endpoint: string, data?: unknown): Promise<T> {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: data
+        ? {
+            'Content-Type': 'application/json',
+          }
+        : {},
       credentials: 'include',
       body: data ? JSON.stringify(data) : undefined,
     });
