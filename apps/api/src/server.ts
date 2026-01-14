@@ -9,6 +9,8 @@ import { accountsRoutes } from './routes/accounts.js';
 import { contactsRoutes } from './routes/contacts.js';
 import { dealsRoutes } from './routes/deals.js';
 import { activitiesRoutes } from './routes/activities.js';
+import { invoiceCustomersRoutes } from './routes/invoiceCustomers.js';
+import { invoicesRoutes } from './routes/invoices.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -36,6 +38,8 @@ await fastify.register(accountsRoutes, { prefix: '/api/v1' });
 await fastify.register(contactsRoutes, { prefix: '/api/v1' });
 await fastify.register(dealsRoutes, { prefix: '/api/v1' });
 await fastify.register(activitiesRoutes, { prefix: '/api/v1' });
+await fastify.register(invoiceCustomersRoutes, { prefix: '/api/v1' });
+await fastify.register(invoicesRoutes, { prefix: '/api/v1' });
 
 // Initialize database connection
 getDb();

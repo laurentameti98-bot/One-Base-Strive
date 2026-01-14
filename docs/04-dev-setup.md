@@ -27,7 +27,7 @@ cp .env.example .env
 Default values in `.env.example` work for local development. Customize if needed:
 
 - `PORT=3001` - Backend API port
-- `DATABASE_URL=./data/strive.db` - SQLite database path
+- `STRIVE_DB_PATH` - SQLite database path (default: `apps/api/data/strive.db`)
 - `SESSION_SECRET` - Session encryption key (change in production!)
 - `SEED_ADMIN_EMAIL=admin@demo.com` - Default admin email
 - `SEED_ADMIN_PASSWORD=admin123` - Default admin password

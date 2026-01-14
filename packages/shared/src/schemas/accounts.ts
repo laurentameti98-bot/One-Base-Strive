@@ -30,3 +30,16 @@ export const AccountSchema = z.object({
 });
 
 export type Account = z.infer<typeof AccountSchema>;
+
+// API Response Schemas
+export const AccountResponseSchema = z.object({
+  data: AccountSchema,
+});
+
+export type AccountResponse = z.infer<typeof AccountResponseSchema>;
+
+export const AccountsResponseSchema = z.object({
+  data: z.array(AccountSchema),
+});
+
+export type AccountsResponse = z.infer<typeof AccountsResponseSchema>;

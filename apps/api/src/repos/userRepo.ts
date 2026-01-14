@@ -37,7 +37,7 @@ export function userRowToUser(row: UserRow): User {
     id: row.id,
     orgId: row.org_id,
     email: row.email,
-    role: row.role,
+    role: row.role as UserRole,
     isActive: row.is_active === 1,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

@@ -32,3 +32,16 @@ export const ContactSchema = z.object({
 });
 
 export type Contact = z.infer<typeof ContactSchema>;
+
+// API Response Schemas
+export const ContactResponseSchema = z.object({
+  data: ContactSchema,
+});
+
+export type ContactResponse = z.infer<typeof ContactResponseSchema>;
+
+export const ContactsResponseSchema = z.object({
+  data: z.array(ContactSchema),
+});
+
+export type ContactsResponse = z.infer<typeof ContactsResponseSchema>;

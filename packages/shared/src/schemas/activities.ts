@@ -36,3 +36,16 @@ export const ActivitySchema = z.object({
 });
 
 export type Activity = z.infer<typeof ActivitySchema>;
+
+// API Response Schemas
+export const ActivityResponseSchema = z.object({
+  data: ActivitySchema,
+});
+
+export type ActivityResponse = z.infer<typeof ActivityResponseSchema>;
+
+export const ActivitiesResponseSchema = z.object({
+  data: z.array(ActivitySchema),
+});
+
+export type ActivitiesResponse = z.infer<typeof ActivitiesResponseSchema>;

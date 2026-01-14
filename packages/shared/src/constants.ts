@@ -1,27 +1,41 @@
-export const UserRole = {
-  ADMIN: 'admin',
-  MEMBER: 'member',
-} as const;
+// User Roles
+export enum UserRole {
+  ADMIN = 'admin',
+  MEMBER = 'member',
+}
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+// Error Codes
+export enum ErrorCode {
+  AUTH_REQUIRED = 'AUTH_REQUIRED',
+  AUTH_INVALID = 'AUTH_INVALID',
+  VALIDATION_ERROR = 'VALIDATION_ERROR',
+  NOT_FOUND = 'NOT_FOUND',
+  FORBIDDEN = 'FORBIDDEN',
+  INTERNAL_ERROR = 'INTERNAL_ERROR',
+}
 
-export const ErrorCode = {
-  AUTH_INVALID: 'AUTH_INVALID',
-  AUTH_REQUIRED: 'AUTH_REQUIRED',
-  VALIDATION_ERROR: 'VALIDATION_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-  NOT_FOUND: 'NOT_FOUND',
-  FORBIDDEN: 'FORBIDDEN',
-} as const;
+// Activity Types
+export enum ActivityType {
+  NOTE = 'note',
+  CALL = 'call',
+  MEETING = 'meeting',
+}
 
-export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
+// Invoice Status
+export enum InvoiceStatus {
+  DRAFT = 'draft',
+  SENT = 'sent',
+  PAID = 'paid',
+  VOID = 'void',
+}
 
-export const ActivityType = {
-  NOTE: 'note',
-  CALL: 'call',
-  MEETING: 'meeting',
-} as const;
+// Payment Method
+export enum PaymentMethod {
+  BANK_TRANSFER = 'bank_transfer',
+  CARD = 'card',
+  CASH = 'cash',
+  OTHER = 'other',
+}
 
-export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType];
-
+// Default Currency
 export const DEFAULT_CURRENCY = 'EUR';

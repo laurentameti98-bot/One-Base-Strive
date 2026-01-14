@@ -1,6 +1,19 @@
 import { z } from 'zod';
 import { DEFAULT_CURRENCY } from '../constants.js';
 
+// Deal Stage Schema (for listing stages)
+export const DealStageSchema = z.object({
+  id: z.string().uuid(),
+  orgId: z.string().uuid(),
+  name: z.string(),
+  sortOrder: z.number(),
+  isClosed: z.boolean(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export type DealStage = z.infer<typeof DealStageSchema>;
+
 // Create Deal Schema
 export const CreateDealSchema = z.object({
   accountId: z.string().uuid('Invalid account ID'),
@@ -36,15 +49,27 @@ export const DealSchema = z.object({
 
 export type Deal = z.infer<typeof DealSchema>;
 
-// Deal Stage Schema (for listing stages)
-export const DealStageSchema = z.object({
-  id: z.string().uuid(),
-  orgId: z.string().uuid(),
-  name: z.string(),
-  sortOrder: z.number(),
-  isClosed: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+// API Response Schemas
+export const DealResponseSchema = z.object({
+  data: DealSchema,
 });
 
-export type DealStage = z.infer<typeof DealStageSchema>;
+export type DealResponse = z.infer<typeof DealResponseSchema>;
+
+export const DealsResponseSchema = z.object({
+  data: z.array(DealSchema),
+});
+
+export type DealsResponse = z.infer<typeof DealsResponseSchema>;
+
+export const DealStageResponseSchema = z.object({
+  data: DealStageSchema,
+});
+
+export type DealStageResponse = z.infer<typeof DealStageResponseSchema>;
+
+export const DealStagesResponseSchema = z.object({
+  data: z.array(DealStageSchema),
+});
+
+export type DealStagesResponse = z.infer<typeof DealStagesResponseSchema>;

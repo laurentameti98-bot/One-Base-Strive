@@ -107,6 +107,10 @@ After seeding, login with:
 ✅ `sessions` - Session tokens  
 ✅ `deal_stages` - CRM pipeline stages  
 
+**Database Location:**  
+Default: `apps/api/data/strive.db`  
+Configure via `STRIVE_DB_PATH` env variable (optional)  
+
 ## 📁 Project Structure
 
 ```

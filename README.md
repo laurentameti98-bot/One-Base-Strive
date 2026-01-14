@@ -53,6 +53,7 @@ one-base-strive/
    ```bash
    cp .env.example .env
    # Edit .env if needed (defaults work for local dev)
+   # Optional: Set STRIVE_DB_PATH to customize database location
    ```
 
 4. **Run migrations**

@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
+import { readFileSync, mkdirSync } from 'fs';
+import { join, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,8 +10,19 @@ let db: Database.Database | null = null;
 
 export function getDb(): Database.Database {
   if (!db) {
-    const dbPath = process.env.DATABASE_URL || './data/strive.db';
-    db = new Database(dbPath);
+    // Single source of truth for DB path
+    const dbPath =
+      process.env.STRIVE_DB_PATH ?? join(__dirname, '..', '..', 'data', 'strive.db');
+    const resolvedPath = resolve(dbPath);
+
+    // Ensure directory exists
+    const dbDir = dirname(resolvedPath);
+    mkdirSync(dbDir, { recursive: true });
+
+    // Log DB path on first connection
+    console.log(`📂 Using database: ${resolvedPath}`);
+
+    db = new Database(resolvedPath);
     db.pragma('journal_mode = WAL');
     db.pragma('foreign_keys = ON');
   }
@@ -48,7 +59,7 @@ export function runMigrations(): void {
 
   // Run additional migrations from migrations directory
   const migrationsDir = join(__dirname, 'migrations');
-  const migrationFiles = ['002_crm_tables.sql']; // Add more as needed
+  const migrationFiles = ['002_crm_tables.sql', '003_erp_invoicing.sql']; // Add more as needed
 
   for (const file of migrationFiles) {
     const migrationPath = join(migrationsDir, file);

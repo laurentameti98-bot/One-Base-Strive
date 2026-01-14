@@ -88,3 +88,54 @@ export interface ActivityRow {
   created_at: string;
   updated_at: string;
 }
+
+// ERP: Invoice Customers
+export interface InvoiceCustomerRow {
+  id: string;
+  org_id: string;
+  account_id: string | null;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  vat_id: string | null;
+  billing_address_line1: string | null;
+  billing_address_line2: string | null;
+  billing_postal_code: string | null;
+  billing_city: string | null;
+  billing_country: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// ERP: Invoices
+export interface InvoiceRow {
+  id: string;
+  org_id: string;
+  customer_id: string;
+  invoice_number: string;
+  status: string;
+  currency: string;
+  issue_date: string;
+  due_date: string | null;
+  notes: string | null;
+  subtotal_cents: number;
+  tax_cents: number;
+  total_cents: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// ERP: Invoice Items
+export interface InvoiceItemRow {
+  id: string;
+  org_id: string;
+  invoice_id: string;
+  description: string;
+  quantity: number;
+  unit_price_cents: number;
+  tax_rate_bps: number;
+  line_total_cents: number;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}

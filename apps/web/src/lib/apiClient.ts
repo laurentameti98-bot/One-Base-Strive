@@ -1,6 +1,6 @@
 import { ErrorResponse } from '@one-base/shared';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001';
 
 export class ApiError extends Error {
   constructor(
@@ -51,6 +51,20 @@ export const apiClient = {
   async put<T>(endpoint: string, data?: unknown): Promise<T> {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'PUT',
+      headers: data
+        ? {
+            'Content-Type': 'application/json',
+          }
+        : {},
+      credentials: 'include',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+    return handleResponse<T>(response);
+  },
+
+  async patch<T>(endpoint: string, data?: unknown): Promise<T> {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      method: 'PATCH',
       headers: data
         ? {
             'Content-Type': 'application/json',
